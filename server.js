@@ -10,6 +10,9 @@ const ghsecret = process.env.GITHUB_CLIENT_SECRET
 const ghid = process.env.GITHUB_CLIENT_ID
 
 app.use(express.static('build'))
+app.use('/css', express.static('css'))
+app.use('/bootswatch', express.static('bootswatch'))
+app.use('/bootswatch-3.3.6-dist', express.static('bootswatch-3.3.6-dist'))
 /*
 app.get('/api/oauth_callback', (req, res) => {
   console.log('got here.')
