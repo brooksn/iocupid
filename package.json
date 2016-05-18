@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "build": "mkdir -p build && browserify app.js -t babelify -t localenvify --outfile build/bundle.js",
-    "postinstall": "npm run-script build",
     "standard": "standard",
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
