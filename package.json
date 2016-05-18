@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "browserify app.js -t babelify --outfile build/bundle.js",
+    "build": "browserify app.js -t babelify -t localenvify --outfile build/bundle.js",
     "standard": "standard",
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -35,6 +35,7 @@
     "babel-preset-react": "^6.5.0",
     "babelify": "^7.3.0",
     "browserify": "^13.0.0",
+    "localenvify": "^1.0.1",
     "react": "^15.0.2",
     "standard": "^7.0.0",
     "yakbak": "^2.4.1"

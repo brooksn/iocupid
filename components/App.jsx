@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
 import nonce from '../actions/nonce.js'
 import queryString from 'query-string'
-import getGitHubToken from '../actions/getGitHubToken.js'
+import finishGitHubAuth from '../actions/finishGitHubAuth.js'
 import Name from './Name.jsx'
 import Email from './Email.jsx'
 import SkillTags from './SkillTags.jsx'
 import * as store from '../stores/formInputStore.js'
-const ghsecret = process.env.GITHUB_CLIENT_SECRET
-const ghid = process.env.GITHUB_CLIENT_ID
+const ghclientid = process.env.GITHUB_CLIENT_ID
 
 export class App extends Component {
   constructor (props) {
@@ -42,8 +41,8 @@ export class App extends Component {
   }
   componentDidMount () {
     if (this.state.oauthCallbackCode && this.state.oauthCallbackState) {
-      getGitHubToken(this.state.oauthCallbackCode)
-      .then(token => console.log('token: ' + token))
+      finishGitHubAuth(this.state.oauthCallbackCode, this.state.oauthCallbackState)
+      .then(got => console.log('got something back: ' + got))
     }
   }
 }
