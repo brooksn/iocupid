@@ -7,6 +7,8 @@ import Email from './Email.jsx'
 import SkillTags from './SkillTags.jsx'
 import * as store from '../stores/formInputStore.js'
 const ghclientid = process.env.GITHUB_CLIENT_ID
+const ghscopes = ['user:email']
+const ghauthbase = 'https://github.com/login/oauth/authorize'
 
 export class App extends Component {
   constructor (props) {
@@ -20,7 +22,7 @@ export class App extends Component {
   }
   render () {
     let githubAuthEnabled = this.state.oauthCallbackCode ? false : true
-    let githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${ghclientid}&state=${nonce(6)}`
+    let githubAuthUrl = `${ghauthbase}?client_id=${ghclientid}&scope=${ghscopes.join(' ')}&state=${nonce(6)}`
     return (
     <div className="app">
       <h1>ioCupid</h1>
@@ -42,7 +44,8 @@ export class App extends Component {
   componentDidMount () {
     if (this.state.oauthCallbackCode && this.state.oauthCallbackState) {
       finishGitHubAuth(this.state.oauthCallbackCode, this.state.oauthCallbackState)
-      .then(got => console.log('got something back: ' + got))
+      .then(json => console.log(json))
+      .then(this.setState({oauthCallbackCode: null, oauthCallbackState: null}))
     }
   }
 }

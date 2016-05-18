@@ -12,20 +12,14 @@ var _nodeFetch2 = _interopRequireDefault(_nodeFetch);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var HOSTNAME = "http://iocupid.com:8080";
+
 function finishGitHubAuth(code) {
   var p = new Promise(function (resolve, reject) {
-    (0, _nodeFetch2.default)('/api/oauth_auth?code=' + code, {
-      method: 'POST'
-    }).then(function (res) {
-      return res.text();
-    }).then(function (text) {
-      var tokenData = text.split('&').map(function (field) {
-        var x = {};
-        var s = field.split('=');
-        x[s[0]] = s[1] || null;
-        return x;
-      });
-      if (tokenData.access_token) resolve(tokenData.access_token);else reject(text);
+    (0, _nodeFetch2.default)(HOSTNAME + '/api/oauth_auth?code=' + code).then(function (res) {
+      return res.json();
+    }).then(function (json) {
+      return resolve(json);
     }).catch(function (err) {
       return reject(err);
     });
@@ -120,6 +114,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var ghclientid = "abf80f96fcede4c9b961";
+var ghscopes = ['user:email'];
+var ghauthbase = 'https://github.com/login/oauth/authorize';
 
 var App = exports.App = function (_Component) {
   _inherits(App, _Component);
@@ -142,7 +138,7 @@ var App = exports.App = function (_Component) {
     key: 'render',
     value: function render() {
       var githubAuthEnabled = this.state.oauthCallbackCode ? false : true;
-      var githubAuthUrl = 'https://github.com/login/oauth/authorize?client_id=' + ghclientid + '&state=' + (0, _nonce2.default)(6);
+      var githubAuthUrl = ghauthbase + '?client_id=' + ghclientid + '&scope=' + ghscopes.join(' ') + '&state=' + (0, _nonce2.default)(6);
       return _react2.default.createElement(
         'div',
         { className: 'app' },
@@ -173,9 +169,9 @@ var App = exports.App = function (_Component) {
     key: 'componentDidMount',
     value: function componentDidMount() {
       if (this.state.oauthCallbackCode && this.state.oauthCallbackState) {
-        (0, _finishGitHubAuth2.default)(this.state.oauthCallbackCode, this.state.oauthCallbackState).then(function (got) {
-          return console.log('got something back: ' + got);
-        });
+        (0, _finishGitHubAuth2.default)(this.state.oauthCallbackCode, this.state.oauthCallbackState).then(function (json) {
+          return console.log(json);
+        }).then(this.setState({ oauthCallbackCode: null, oauthCallbackState: null }));
       }
     }
   }]);
