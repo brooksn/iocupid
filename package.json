@@ -10,8 +10,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
-    "node": "^6.1.0",
-    "npm": "^3.8.6"
+    "node": "^6.2.0",
+    "npm": "^3.8.9"
   },
   "keywords": [],
   "author": "",
