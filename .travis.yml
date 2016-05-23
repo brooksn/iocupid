@@ -3,4 +3,4 @@ node_js:
   - 6
 script:
   - npm install
-  - npm test
+  - npm run-script tape

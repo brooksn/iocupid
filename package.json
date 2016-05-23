@@ -11,7 +11,8 @@
     "lint": "eslint . --ext .js --ext .jsx",
     "lint:fix": "eslint . --ext .js --ext .jsx --fix",
     "start": "node src/server.js",
-    "test": "tape -r babel-register src/tests/**/*.js | tnyan",
+    "tape": "tape -r babel-register src/tests/**/*.js",
+    "test": "npm run-script tape | tnyan",
     "test:code": "tape -r babel-register \"src/tests/**/!(eslint).js\" | tnyan",
     "test:lint": "tape -r babel-register \"src/tests/**/eslint.js\" | tnyan"
   },
