@@ -1,2 +1,8 @@
 .DS_STORE
 node_modules
+.env
+build
+rethinkdb_data
+gh.js
+text.js
+*.log

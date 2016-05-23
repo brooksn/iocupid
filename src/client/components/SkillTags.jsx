@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import * as store from '../stores/formInputStore.js'
-import keywords from '../mergedKeywords.json'
+import keywords from '../mergedKeywords.js'
 import Tags from 'react-tag-autocomplete'
+const allowCustomTags = false
 
 export default class SkillTags extends Component {
   constructor (props) {
     super(props)
-    let suggestions = keywords.map((val, ind) => {
-      return {id: val, name: val}
+    let suggestions = keywords.map(keyword => {
+      return {id: keyword, name: keyword}
     })
     this.state = {
       input: '',
@@ -20,7 +21,7 @@ export default class SkillTags extends Component {
     let suggestions
     let input = this.state.input
     let filter = val => val.name != input
-    if (typeof input === 'string' && input.length > 0) {
+    if (allowCustomTags === true && typeof input === 'string' && input.length > 0) {
       suggestions = [{id: input, name: input}].concat(this.state.suggestions.filter(filter))
     } else {
       suggestions = this.state.suggestions
@@ -39,8 +40,8 @@ export default class SkillTags extends Component {
   storeChange (change) {
     if (change === 'CHANGE_SKILLS') {
       let skills = store.getSkills()
-      let tags = skills.map((val, ind) => {
-        return {id: val, name: val}
+      let tags = skills.map(skill => {
+        return {id: skill, name: skill}
       })
       this.setState({tags: tags})
     }

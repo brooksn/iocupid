@@ -1,4 +1,4 @@
-[
+module.exports = [
   "open data",
   "data",
   "statistics",
