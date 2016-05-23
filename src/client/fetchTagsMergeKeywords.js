@@ -1,9 +1,9 @@
 const fs = require('fs')
 const fetch = require('node-fetch')
 
-let keywords = JSON.parse(fs.readFileSync('./keywords.json'))
+const keywords = JSON.parse(fs.readFileSync('./keywords.json'))
 
-let promises = []
+const promises = []
 for (let i = 1; i <= 20; i++) {
   promises.push(fetch(`https://api.stackexchange.com/2.2/tags?page=${i}&order=desc&sort=popular&site=stackoverflow`))
 }
@@ -18,6 +18,6 @@ Promise.all(promises)
     return array
   })
   .then(tags => {
-    let terms = keywords.concat(tags.filter(val => keywords.indexOf(val) < 0))
+    const terms = keywords.concat(tags.filter(val => keywords.indexOf(val) < 0))
     fs.writeFileSync('mergedKeywords.json', JSON.stringify(terms, null, '  ') + '\n', 'utf8')
   })

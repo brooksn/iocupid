@@ -7,7 +7,7 @@ const allowCustomTags = false
 export default class SkillTags extends Component {
   constructor(props) {
     super(props)
-    let suggestions = keywords.map(keyword => {
+    const suggestions = keywords.map(keyword => {
       return {id: keyword, name: keyword}
     })
     this.state = {
@@ -19,8 +19,8 @@ export default class SkillTags extends Component {
   render() {
     const tags = this.state.tags
     let suggestions
-    let input = this.state.input
-    let filter = val => val.name != input
+    const input = this.state.input
+    const filter = val => val.name != input
     if (allowCustomTags === true && typeof input === 'string' && input.length > 0) {
       suggestions = [{id: input, name: input}].concat(this.state.suggestions.filter(filter))
     } else {
@@ -39,8 +39,8 @@ export default class SkillTags extends Component {
   }
   storeChange(change) {
     if (change === 'CHANGE_SKILLS') {
-      let skills = store.getSkills()
-      let tags = skills.map(skill => {
+      const skills = store.getSkills()
+      const tags = skills.map(skill => {
         return {id: skill, name: skill}
       })
       this.setState({tags: tags})
@@ -53,8 +53,8 @@ export default class SkillTags extends Component {
     store.unobserveChanges(this.storeChange.bind(this))
   }
   handleDelete(i) {
-    let tags = this.state.tags
-    let tag = tags.splice(i, 1)
+    const tags = this.state.tags
+    const tag = tags.splice(i, 1)
     store.removeSkill(tag.name)
   }
   handleAddition(tag) {

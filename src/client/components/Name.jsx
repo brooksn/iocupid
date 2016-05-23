@@ -4,7 +4,7 @@ import * as store from '../stores/formInputStore.js'
 export default class Name extends Component {
   constructor(props) {
     super(props)
-    let name = store.getName()
+    const name = store.getName()
     this.state = {
       name: name
     }
@@ -23,7 +23,7 @@ export default class Name extends Component {
   }
   storeChange(change) {
     if (change === 'CHANGE_NAME') {
-      let name = store.getName()
+      const name = store.getName()
       this.setState({name: name})
     }
   }
@@ -34,7 +34,7 @@ export default class Name extends Component {
     store.unobserveChanges(this.storeChange.bind(this))
   }
   handleNameInputChange(event) {
-    let name = event.target.value
+    const name = event.target.value
     store.changeName(name)
   }
 }

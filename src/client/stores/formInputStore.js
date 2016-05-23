@@ -17,7 +17,7 @@ export function unobserveChanges(fn) {
   observers.delete(fn)
 }
 
-let notifyChange = function notifyChange(change) {
+const notifyChange = function notifyChange(change) {
   observers.forEach(observer => {
     observer(change)
   })
@@ -33,7 +33,7 @@ export function addSkill(skill) {
 }
 
 export const removeSkill = function removeSkill(skill) {
-  let index = formInput.skills.indexOf(skill)
+  const index = formInput.skills.indexOf(skill)
   if (index >= 0) {
     formInput.skills.splice(index, 1)
     throttledNotifyChange('CHANGE_SKILLS')
@@ -48,7 +48,7 @@ export const addInterest = function addInterest(interest) {
 }
 
 export const removeInterest = function removeInterest(interest) {
-  let index = formInput.interests.indexOf(interest)
+  const index = formInput.interests.indexOf(interest)
   if (index >= 0) {
     formInput.interests.splice(index, 1)
     throttledNotifyChange('CHANGE_INTERESTS')

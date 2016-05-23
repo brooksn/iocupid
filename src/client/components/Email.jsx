@@ -4,7 +4,7 @@ import * as store from '../stores/formInputStore.js'
 export default class Email extends Component {
   constructor(props) {
     super(props)
-    let email = store.getEmail()
+    const email = store.getEmail()
     this.state = {
       email: email
     }
@@ -24,7 +24,7 @@ export default class Email extends Component {
   }
   storeChange(change) {
     if (change === 'CHANGE_EMAIL') {
-      let email = store.getEmail()
+      const email = store.getEmail()
       this.setState({email: email})
     }
   }
@@ -35,7 +35,7 @@ export default class Email extends Component {
     store.unobserveChanges(this.storeChange.bind(this))
   }
   handleEmailInputChange(event) {
-    let email = event.target.value
+    const email = event.target.value
     store.changeEmail(email)
   }
 }

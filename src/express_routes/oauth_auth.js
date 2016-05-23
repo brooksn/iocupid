@@ -11,19 +11,19 @@ module.exports = function* oauth_auth(code) {
     throw Error('this.rconn, this.dbname, and this.utable are required.')
   }
   const u = `${this.ghtokenurl}?client_id=${this.ghid}&client_secret=${this.ghsecret}&code=${code}`
-  let tokenRes = yield fetch(u, {
+  const tokenRes = yield fetch(u, {
     method: 'POST', 
     headers: {Accept: 'application/json'}
   })
-  let tokenJson = yield tokenRes.json()
-  let token = tokenJson.access_token
+  const tokenJson = yield tokenRes.json()
+  const token = tokenJson.access_token
   const ghEmailsUrl = `https://api.github.com/user/emails?access_token=${token}`
-  let ghEmails = yield fetch(ghEmailsUrl).then(res => res.json())
-  let addresses = ghEmails.map(e => e.email)
+  const ghEmails = yield fetch(ghEmailsUrl).then(res => res.json())
+  const addresses = ghEmails.map(e => e.email)
   if (addresses.length === 0) throw Error('No email addresses are associated with this user.')
-  let getUserId = userIdWithEmail.bind(this)
+  const getUserId = userIdWithEmail.bind(this)
   let userID = yield getUserId(addresses).then(cursor => cursor.next()).catch(() => null)  
-  let ioEmails = ghEmails.map(email => {
+  const ioEmails = ghEmails.map(email => {
     email.primary = email.primary === 'primary' ? 'github' : null
     return email
   })
@@ -38,7 +38,7 @@ module.exports = function* oauth_auth(code) {
     .run(this.rconn)
   }
   // userID = user.changes[0].new_val.id
-  let payload = {userID}
-  let jwt = jsonwebtoken.sign(payload, JWT_SECRET)
+  const payload = {userID}
+  const jwt = jsonwebtoken.sign(payload, JWT_SECRET)
   return jwt
 }

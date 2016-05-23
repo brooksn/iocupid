@@ -26,9 +26,9 @@ export default class Header extends Component {
   }
   render() {
     const oauthCallback = this.state.oauthCallback ? true : false
-    let scopes = ghscopes.join(' ')
-    let state = nonce(6)
-    let githubAuthUrl = `${ghauthbase}?client_id=${ghclientid}&scope=${scopes}&state=${state}`
+    const scopes = ghscopes.join(' ')
+    const state = nonce(6)
+    const githubAuthUrl = `${ghauthbase}?client_id=${ghclientid}&scope=${scopes}&state=${state}`
     let spinner = null
     if (oauthCallback === true) {
       spinner = ( // eslint-disable-line no-extra-parens
