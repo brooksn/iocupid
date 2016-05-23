@@ -5,7 +5,7 @@ A matchmaker for project teams.
 
 ## Contribution
 
-```js
+```bash
 $ npm install 
 $ npm test
 ```
