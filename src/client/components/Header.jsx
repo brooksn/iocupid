@@ -16,13 +16,13 @@ export default class Header extends Component {
     this.state = {}
     const urlQuery = queryString.parse(location.search)
     if (urlQuery.code && urlQuery.state) {
-      this.setState({
+      this.state = {
         oauthCallbackCode: urlQuery.code, 
         oauthCallbackState: urlQuery.state, 
         oauthCallback: true
-      })
+      }
     }
-    if (urlQuery.spin) this.setState({oauthCallback: true})
+    if (urlQuery.spin) this.state.oauthCallback = true // eslint-disable-line
   }
   render() {
     const oauthCallback = this.state.oauthCallback ? true : false
