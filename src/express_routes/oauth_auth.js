@@ -6,12 +6,19 @@ const jsonwebtoken = require('jsonwebtoken')
 const JWT_SECRET = process.env.JWT_SECRET
 // const wait = require('wait-promise')
 
-module.exports = function* oauth_auth (code) {
-  if (!this.rconn || !this.rdbname || !this.utable) throw Error('this.rconn, this.dbname, and this.utable are required.')
-  let tokenRes = yield fetch(`${this.ghtokenurl}?client_id=${this.ghid}&client_secret=${this.ghsecret}&code=${code}`, {method: 'POST', headers: {Accept: 'application/json'}})
+module.exports = function* oauth_auth(code) {
+  if (!this.rconn || !this.rdbname || !this.utable) {
+    throw Error('this.rconn, this.dbname, and this.utable are required.')
+  }
+  const u = `${this.ghtokenurl}?client_id=${this.ghid}&client_secret=${this.ghsecret}&code=${code}`
+  let tokenRes = yield fetch(u, {
+    method: 'POST', 
+    headers: {Accept: 'application/json'}
+  })
   let tokenJson = yield tokenRes.json()
   let token = tokenJson.access_token
-  let ghEmails = yield fetch(`https://api.github.com/user/emails?access_token=${token}`).then(res => res.json())
+  const ghEmailsUrl = `https://api.github.com/user/emails?access_token=${token}`
+  let ghEmails = yield fetch(ghEmailsUrl).then(res => res.json())
   let addresses = ghEmails.map(e => e.email)
   if (addresses.length === 0) throw Error('No email addresses are associated with this user.')
   let getUserId = userIdWithEmail.bind(this)

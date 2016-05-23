@@ -5,7 +5,7 @@ import { App } from './components/App.jsx'
 import Home from './components/Home.jsx'
 import Form from './components/Form.jsx'
 
-const router = (
+const router = ( // eslint-disable-line no-extra-parens
   <Router history={browserHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={Home} />

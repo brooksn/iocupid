@@ -14,5 +14,18 @@
       "modules": true
     },
     "sourceType": "module"
+  },
+  "rules": {
+    "max-len": [1, {"code": 100, "ignoreUrls": true}],
+    "max-nested-callbacks": [2, {"max": 2}],
+    "generator-star-spacing": [2, {"before": false, "after": true}],
+    "prefer-arrow-callback": [1, {allowNamedFunctions: true}],
+    "callback-return": 2,
+    "no-extra-parens": 1,
+    "space-before-function-paren": [1, {"anonymous": "always", "named": "never"}],
+    "keyword-spacing": 2,
+    "space-before-blocks": 2,
+    "arrow-spacing": [2, { "before": true, "after": true }],
+    "no-confusing-arrow": 1
   }
 }

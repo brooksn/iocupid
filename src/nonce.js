@@ -1,4 +1,4 @@
-module.exports = function(len){
+module.exports = function (len) {
   var l = 10;
   if (len && typeof len === 'number') l = len;
   var a = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM_1234567890';

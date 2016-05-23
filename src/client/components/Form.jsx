@@ -5,7 +5,7 @@ import SkillTags from './SkillTags.jsx'
 import * as store from '../stores/formInputStore.js'
 
 export default class Form extends Component {
-  render () {
+  render() {
     return (
     <div className="form">
       <hr />
@@ -16,7 +16,7 @@ export default class Form extends Component {
     </div>
     )
   }
-  printStore () {
+  printStore() {
     return store
   }
 }

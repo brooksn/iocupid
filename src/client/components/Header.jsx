@@ -11,22 +11,33 @@ const ghscopes = ['user:email']
 const ghauthbase = 'https://github.com/login/oauth/authorize'
 
 export default class Header extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {}
     const urlQuery = queryString.parse(location.search)
     if (urlQuery.code && urlQuery.state) {
-      this.setState({oauthCallbackCode: urlQuery.code, oauthCallbackState: urlQuery.state, oauthCallback: true})
+      this.setState({
+        oauthCallbackCode: urlQuery.code, 
+        oauthCallbackState: urlQuery.state, 
+        oauthCallback: true
+      })
     }
     if (urlQuery.spin) this.setState({oauthCallback: true})
   }
-  render () {
+  render() {
     const oauthCallback = this.state.oauthCallback ? true : false
-    let githubAuthUrl = `${ghauthbase}?client_id=${ghclientid}&scope=${ghscopes.join(' ')}&state=${nonce(6)}`
+    let scopes = ghscopes.join(' ')
+    let state = nonce(6)
+    let githubAuthUrl = `${ghauthbase}?client_id=${ghclientid}&scope=${scopes}&state=${state}`
     let spinner = null
     if (oauthCallback === true) {
-      
-      spinner = <Spinner style={this.props.styles.spinner} spinnerName="cube-grid" noFadeIn />
+      spinner = ( // eslint-disable-line no-extra-parens
+        <Spinner
+          style={this.props.styles.spinner} 
+          spinnerName="cube-grid" 
+          noFadeIn 
+        />
+      )
     }
     return (
     <Navbar>
@@ -41,14 +52,15 @@ export default class Header extends Component {
         <Button bsSize="small"
           href={oauthCallback === true ? null : githubAuthUrl}>
           <span style={this.props.styles.buttonText}>
-          {oauthCallback === true ? 'Authorizing Github' : 'Sign in with GitHub'}</span>
+            {oauthCallback === true ? 'Authorizing Github' : 'Sign in with GitHub'}
+          </span>
           {spinner}
         </Button>
       </Navbar.Form>
     </Navbar>
     )
   }
-  componentWillMount () {
+  componentWillMount() {
     if (this.state.oauthCallbackCode && this.state.oauthCallbackState) {
       finishGitHubAuth(this.state.oauthCallbackCode, this.state.oauthCallbackState)
       .then(jwt => {

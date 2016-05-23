@@ -5,7 +5,7 @@ import Tags from 'react-tag-autocomplete'
 const allowCustomTags = false
 
 export default class SkillTags extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     let suggestions = keywords.map(keyword => {
       return {id: keyword, name: keyword}
@@ -16,7 +16,7 @@ export default class SkillTags extends Component {
       suggestions: suggestions
     }
   }
-  render () {
+  render() {
     const tags = this.state.tags
     let suggestions
     let input = this.state.input
@@ -37,7 +37,7 @@ export default class SkillTags extends Component {
         handleInputChange={this.handleInputChange.bind(this)} />
     )
   }
-  storeChange (change) {
+  storeChange(change) {
     if (change === 'CHANGE_SKILLS') {
       let skills = store.getSkills()
       let tags = skills.map(skill => {
@@ -46,24 +46,24 @@ export default class SkillTags extends Component {
       this.setState({tags: tags})
     }
   }
-  componentDidMount () {
+  componentDidMount() {
     store.observeChanges(this.storeChange.bind(this))
   }
-  componentWillUnmount () {
+  componentWillUnmount() {
     store.unobserveChanges(this.storeChange.bind(this))
   }
-  handleDelete (i) {
+  handleDelete(i) {
     let tags = this.state.tags
     let tag = tags.splice(i, 1)
     store.removeSkill(tag.name)
   }
-  handleAddition (tag) {
+  handleAddition(tag) {
     let name = tag
     if (typeof tag !== 'string') name = tag.name
 
     store.addSkill(name)
   }
-  handleInputChange (input) {
+  handleInputChange(input) {
     this.setState({input: input})
   }
 }

@@ -25,8 +25,12 @@ app.use(require('webpack-dev-middleware')(webpacker, {
 app.use(require('webpack-hot-middleware')(webpacker))
 
 app.use('/css', express.static(path.join(__dirname, 'client/css')))
-app.use('/bootswatch', express.static(path.join(__dirname, 'client/bootswatch')))
-app.use('/bootswatch-3.3.6-dist', express.static(path.join(__dirname, 'client/bootswatch-3.3.6-dist')))
+app.use('/bootswatch', express.static(
+  path.join(__dirname, 'client/bootswatch')
+))
+app.use('/bootswatch-3.3.6-dist', express.static(
+  path.join(__dirname, 'client/bootswatch-3.3.6-dist')
+))
 
 app.get('/api/test', (req, res) => res.send(emoji.emojify('Just a test :heart:')))
 

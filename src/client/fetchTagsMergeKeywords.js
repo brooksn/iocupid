@@ -12,7 +12,9 @@ Promise.all(promises)
   .then(results => Promise.all(results.map(result => result.json())))
   .then(json => json.map(x => x.items).reduce((a, b) => a.concat(b)).map(r => r.name))
   .then(array => {
-    fs.writeFileSync('popularStackOverflowTags.json', JSON.stringify(array, null, '  ') + '\n', 'utf8')
+    fs.writeFileSync('popularStackOverflowTags.json', 
+      JSON.stringify(array, null, '  ') + '\n', 'utf8'
+    )
     return array
   })
   .then(tags => {

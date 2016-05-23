@@ -3,7 +3,7 @@ import { PageHeader, Row } from 'react-bootstrap'
 
 export default class Home extends Component {
 
-  render () {
+  render() {
     return (
       <Row>
         <PageHeader>Form a great team.</PageHeader>

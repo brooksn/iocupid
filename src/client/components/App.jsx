@@ -3,7 +3,7 @@ import GitHubForkRibbon from 'react-github-fork-ribbon'
 import Header from './Header.jsx'
 
 export class App extends Component {
-  render () {
+  render() {
     return (
     <div className="app" thingy={true}>
       <GitHubForkRibbon

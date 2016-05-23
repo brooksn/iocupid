@@ -9,30 +9,30 @@ const formInput = {
 
 export const observers = new Set()
 
-export function observeChanges (fn) {
+export function observeChanges(fn) {
   observers.add(fn)
 }
 
-export function unobserveChanges (fn) {
+export function unobserveChanges(fn) {
   observers.delete(fn)
 }
 
-let notifyChange = function notifyChange (change) {
-  observers.forEach(function (observer) {
+let notifyChange = function notifyChange(change) {
+  observers.forEach(observer => {
     observer(change)
   })
 }
 
 const throttledNotifyChange = throttle(notifyChange, 100)
 
-export const addSkill = function (skill) {
+export function addSkill(skill) {
   if (formInput.skills.indexOf(skill) < 0) {
     formInput.skills.push(skill)
     throttledNotifyChange('CHANGE_SKILLS')
   }
 }
 
-export const removeSkill = function (skill) {
+export const removeSkill = function removeSkill(skill) {
   let index = formInput.skills.indexOf(skill)
   if (index >= 0) {
     formInput.skills.splice(index, 1)
@@ -40,14 +40,14 @@ export const removeSkill = function (skill) {
   }
 }
 
-export const addInterest = function (interest) {
+export const addInterest = function addInterest(interest) {
   if (formInput.interests.indexOf(interest) < 0) {
     formInput.interests.push(interest)
     throttledNotifyChange('CHANGE_INTERESTS')
   }
 }
 
-export const removeInterest = function (interest) {
+export const removeInterest = function removeInterest(interest) {
   let index = formInput.interests.indexOf(interest)
   if (index >= 0) {
     formInput.interests.splice(index, 1)
@@ -55,7 +55,7 @@ export const removeInterest = function (interest) {
   }
 }
 
-export const changeEmail = function (email) {
+export const changeEmail = function changeEmail(email) {
   if (formInput.email !== email) {
     formInput.email = email
     throttledNotifyChange('CHANGE_EMAIL')
@@ -69,18 +69,18 @@ export const changeName = function (name) {
   }
 }
 
-export function getEmail () {
+export const getEmail = function getEmail() {
   return formInput.email
 }
 
-export function getName () {
+export const getName = function getName() {
   return formInput.name
 }
 
-export function getSkills () {
+export const getSkills = function getSkills() {
   return formInput.skills
 }
 
-export function getInterests () {
+export const getInterests = function getInterests() {
   return formInput.interests
 }
