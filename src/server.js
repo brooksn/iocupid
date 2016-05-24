@@ -1,5 +1,5 @@
 require('dotenv-safe').config({silent: true})
-const r = require('rethinkdb')
+// const r = require('rethinkdb')
 const co = require('co')
 const PORT = process.env.PORT || 8080
 const path = require('path')
@@ -8,6 +8,7 @@ const webpack = require('webpack')
 const webpackConfig = require('../webpack.config.js')
 const webpacker = webpack(webpackConfig)
 const oauthAuth = require('./express_routes/oauth_auth.js').bind(this)
+const setupDatabase = require('./setupDatabase.js').bind(this)
 const express = require('express')
 const app = express()
 const rconnectionparams = { host: 'localhost', port: 28015 }
@@ -44,20 +45,8 @@ app.get('/api/oauth_auth', (req, res) => {
 
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'client/index.html')))
 
-r.connect(rconnectionparams)
-.then(res => {
-  this.rconn = res
-  return r.dbCreate(this.rdbname).run(this.rconn)
-})
-.catch(err => {
-  if (err.msg !== 'Database `' + this.rdbname + '` already exists.') throw err
-})
-.then(() => r.db(this.rdbname).tableCreate(this.utable).run(this.rconn))
-.catch(err => {
-  if (err.msg !== 'Table `' + this.rdbname + '.' + this.utable + '` already exists.') throw err
-})
+co(setupDatabase(rconnectionparams))
 .then(app.listen(PORT, () => {
   // eslint-disable-next-line no-console
   console.log(emoji.emojify(`ioCupid server started on port ${PORT}! :heart:`))
 }))
-
