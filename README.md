@@ -7,5 +7,6 @@ A matchmaker for project teams.
 
 ```bash
 $ npm install 
-$ npm test
+$ npm test 
+$ npm start 
 ```

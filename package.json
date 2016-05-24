@@ -1,7 +1,7 @@
 {
   "name": "iocupid",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.1.0",
+  "description": "A matchmaker for project teams.",
   "main": "src/server.js",
   "scripts": {
     "build": "npm run clean && npm run build:webpack",
@@ -13,8 +13,8 @@
     "start": "node src/server.js",
     "tape": "tape -r babel-register src/tests/**/*.js",
     "test": "npm run-script tape | tnyan",
-    "test:code": "tape -r babel-register \"src/tests/**/!(eslint).js\" | tnyan",
-    "test:lint": "tape -r babel-register \"src/tests/**/eslint.js\" | tnyan"
+    "test:code": "tape -r babel-register \"src/tests/**/!(eslint).js\"",
+    "test:lint": "tape -r babel-register \"src/tests/**/eslint.js\""
   },
   "engines": {
     "node": "^6.2.0",
