@@ -1,14 +1,16 @@
 require('dotenv-safe').config({silent: true})
-// const r = require('rethinkdb')
-const co = require('co')
 const PORT = process.env.PORT || 8080
+const EventEmitter = require('events');
+const server = new EventEmitter();
+const enableDestroy = require('server-destroy')
+const co = require('co')
+const r = require('rethinkdb')
 const path = require('path')
 const emoji = require('node-emoji')
 const webpack = require('webpack')
 const webpackConfig = require('../webpack.config.js')
 const webpacker = webpack(webpackConfig)
 const oauthAuth = require('./express_routes/oauth_auth.js').bind(this)
-const setupDatabase = require('./setupDatabase.js').bind(this)
 const express = require('express')
 const app = express()
 const rconnectionparams = { host: 'localhost', port: 28015 }
@@ -18,13 +20,15 @@ this.ghtokenurl = 'https://github.com/login/oauth/access_token'
 this.rdbname = 'iocupid'
 this.utable = 'users'
 
-app.use(require('webpack-dev-middleware')(webpacker, {
-  noInfo: true,
-  publicPath: webpackConfig.output.publicPath
-}))
+if (process.env.NODE_ENV === 'development') {
+  app.use(require('webpack-dev-middleware')(webpacker, {
+    noInfo: true,
+    publicPath: webpackConfig.output.publicPath
+  }))
+  app.use(require('webpack-hot-middleware')(webpacker))
+}
 
-app.use(require('webpack-hot-middleware')(webpacker))
-
+app.use('/static', express.static(path.join(__dirname, '../', 'dist')))
 app.use('/css', express.static(path.join(__dirname, 'client/css')))
 app.use('/bootswatch', express.static(
   path.join(__dirname, 'client/bootswatch')
@@ -45,8 +49,18 @@ app.get('/api/oauth_auth', (req, res) => {
 
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'client/index.html')))
 
-co(setupDatabase(rconnectionparams))
-.then(app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
-  console.log(emoji.emojify(`ioCupid server started on port ${PORT}! :heart:`))
-}))
+r.connect(rconnectionparams)
+.then(rconn => {
+  this.rconn = rconn
+  module.exports.rconn = this.rconn
+  module.exports.http = app.listen(PORT, () => {
+    enableDestroy(module.exports.http);
+    module.exports.emit('server started', PORT)
+    module.exports.stop = () => {
+      server.http.destroy()
+      return server.rconn.close({noreplyWait: false})
+    }
+  })
+}).catch(err => console.error(err)) //eslint-disable-line
+
+module.exports = server

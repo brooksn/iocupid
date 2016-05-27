@@ -2,7 +2,7 @@
   "name": "iocupid",
   "version": "0.1.0",
   "description": "A matchmaker for project teams.",
-  "main": "src/server.js",
+  "main": "src/index.js",
   "scripts": {
     "build": "npm run clean && npm run build:webpack",
     "build:browserify": "mkdir -p build && browserify src/client/app.js -t babelify -t localenvify --outfile build/bundle.js",
@@ -10,7 +10,8 @@
     "clean": "rimraf dist",
     "lint": "eslint . --ext .js --ext .jsx",
     "lint:fix": "eslint . --ext .js --ext .jsx --fix",
-    "start": "node src/server.js",
+    "postinstall": "node src/postinstall.js",
+    "start": "node src/index.js",
     "tape": "tape -r babel-register src/tests/**/*.js",
     "test": "npm run-script tape | tnyan",
     "test:code": "tape -r babel-register \"src/tests/**/!(eslint).js\"",
@@ -44,6 +45,7 @@
     "react-tag-autocomplete": "^4.0.2",
     "redux": "^3.5.2",
     "rethinkdb": "^2.3.1",
+    "server-destroy": "^1.0.1",
     "style-loader": "^0.13.1",
     "wait-promise": "^0.3.1",
     "whatwg-fetch": "^1.0.0"
@@ -53,6 +55,7 @@
     "babel-loader": "^6.2.4",
     "babel-preset-es2015": "^6.6.0",
     "babel-preset-react": "^6.5.0",
+    "coveralls": "^2.11.9",
     "eslint": "^2.10.2",
     "eslint-config-standard": "^5.3.1",
     "eslint-plugin-promise": "^1.1.0",
@@ -68,6 +71,7 @@
     "webpack-dev-middleware": "^1.6.1",
     "webpack-dev-server": "^1.14.1",
     "webpack-dotenv-plugin": "^1.1.0",
-    "webpack-hot-middleware": "^2.10.0"
+    "webpack-hot-middleware": "^2.10.0",
+    "yakbak": "^2.4.3"
   }
 }
