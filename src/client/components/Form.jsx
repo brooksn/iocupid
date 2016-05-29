@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import Name from './Name.jsx'
 import Email from './Email.jsx'
 import SkillTags from './SkillTags.jsx'
-import * as store from '../stores/formInputStore.js'
 
 export default class Form extends Component {
   render() {
@@ -15,8 +14,5 @@ export default class Form extends Component {
       <hr />
     </div>
     )
-  }
-  printStore() {
-    return store
   }
 }

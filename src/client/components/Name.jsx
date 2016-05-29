@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import * as store from '../stores/formInputStore.js'
+import store, { changeName, getName, CHANGE_EVENT } from '../stores/formInputStore.js'
+
 
 export default class Name extends Component {
   constructor(props) {
     super(props)
-    const name = store.getName()
+    const name = getName()
     this.state = {
       name: name
     }
@@ -21,20 +22,18 @@ export default class Name extends Component {
     </div>
     )
   }
-  storeChange(change) {
-    if (change === 'CHANGE_NAME') {
-      const name = store.getName()
-      this.setState({name: name})
-    }
+  storeChange() {
+    const name = getName()
+    if (name !== this.state.name) this.setState({name})
   }
   componentDidMount() {
-    store.observeChanges(this.storeChange.bind(this))
+    store.on(CHANGE_EVENT, this.storeChange.bind(this))
   }
   componentWillUnmount() {
-    store.unobserveChanges(this.storeChange.bind(this))
+    store.removeListener(CHANGE_EVENT, this.storeChange.bind(this))
   }
   handleNameInputChange(event) {
     const name = event.target.value
-    store.changeName(name)
+    changeName(name)
   }
 }

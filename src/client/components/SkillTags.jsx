@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import * as store from '../stores/formInputStore.js'
+import store, { addSkill, removeSkill, getSkills, CHANGE_EVENT } from '../stores/formInputStore.js'
 import keywords from '../mergedKeywords.js'
 import Tags from 'react-tag-autocomplete'
 const allowCustomTags = false
@@ -37,33 +37,37 @@ export default class SkillTags extends Component {
         handleInputChange={this.handleInputChange.bind(this)} />
     )
   }
-  storeChange(change) {
-    if (change === 'CHANGE_SKILLS') {
-      const skills = store.getSkills()
-      const tags = skills.map(skill => {
-        return {id: skill, name: skill}
-      })
-      this.setState({tags: tags})
+  storeChange() {
+    const skills = getSkills()
+    const l = skills.length
+    const tags = this.state.tags.map(tag => tag.name)
+    const skillTags = skills.map(skill => {return {id:skill, name:skill}})
+    const t = tags.length
+    if (l !== t) return this.setState({tags: skillTags})
+    for (let i=0; i < l; i++) {
+      if (skills[i] !== this.state.tags[i]) {
+        this.setState({tags: skillTags})
+        break;
+      }
     }
   }
   componentDidMount() {
-    store.observeChanges(this.storeChange.bind(this))
+    store.on(CHANGE_EVENT, this.storeChange.bind(this))
   }
   componentWillUnmount() {
-    store.unobserveChanges(this.storeChange.bind(this))
+    store.removeListener(CHANGE_EVENT, this.storeChange.bind(this))
   }
   handleDelete(i) {
     const tags = this.state.tags
     const tag = tags.splice(i, 1)
-    store.removeSkill(tag.name)
+    removeSkill(tag.name)
   }
   handleAddition(tag) {
     let name = tag
     if (typeof tag !== 'string') name = tag.name
-
-    store.addSkill(name)
+    addSkill(name)
   }
   handleInputChange(input) {
-    this.setState({input: input})
+    this.setState({input})
   }
 }

@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import * as store from '../stores/formInputStore.js'
+import store, { changeEmail, getEmail, CHANGE_EVENT } from '../stores/formInputStore.js'
 
 export default class Email extends Component {
   constructor(props) {
     super(props)
-    const email = store.getEmail()
+    const email = getEmail()
     this.state = {
       email: email
     }
@@ -22,20 +22,18 @@ export default class Email extends Component {
     </div>
     )
   }
-  storeChange(change) {
-    if (change === 'CHANGE_EMAIL') {
-      const email = store.getEmail()
-      this.setState({email: email})
-    }
+  storeChange() {
+    const email = getEmail()
+    if (email !== this.state.email) this.setState({email})
   }
   componentDidMount() {
-    store.observeChanges(this.storeChange.bind(this))
+    store.on(CHANGE_EVENT, this.storeChange.bind(this))
   }
   componentWillUnmount() {
-    store.unobserveChanges(this.storeChange.bind(this))
+    store.removeListener(CHANGE_EVENT, this.storeChange.bind(this))
   }
   handleEmailInputChange(event) {
     const email = event.target.value
-    store.changeEmail(email)
+    changeEmail(email)
   }
 }
