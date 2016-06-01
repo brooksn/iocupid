@@ -1,6 +1,7 @@
-import throttle from 'lodash.throttle'
+import { throttle } from 'lodash'
 import decode from 'jwt-decode'
 import EventEmitter from 'events'
+import AppDispatcher from '../dispatcher/AppDispatcher.js'
 const authStore = new EventEmitter()
 const localStorageKey = 'base64jwt'
 export const CHANGE_EVENT = 'change'
@@ -44,5 +45,11 @@ export const getUserID = function getUserID() {
   if (!store.base64jwt) return store.base64jwt
   else return decode(store.base64jwt).userID
 }
+
+AppDispatcher.register((dispatch) => {
+  if (dispatch.actionType === 'SET_JWT_BASE_64') {
+    setJWTBase64(dispatch.data.token)
+  }
+})
 
 export default authStore
