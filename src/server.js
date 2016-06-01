@@ -30,12 +30,7 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use('/static', express.static(path.join(__dirname, '../', 'dist')))
 app.use('/css', express.static(path.join(__dirname, 'client/css')))
-app.use('/bootswatch', express.static(
-  path.join(__dirname, 'client/bootswatch')
-))
-app.use('/bootswatch-3.3.6-dist', express.static(
-  path.join(__dirname, 'client/bootswatch-3.3.6-dist')
-))
+app.use('/public', express.static(path.join(__dirname, 'client', 'public')))
 
 app.get('/api/test', (req, res) => res.send(emoji.emojify('Just a test :heart:')))
 
