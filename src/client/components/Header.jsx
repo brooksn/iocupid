@@ -1,43 +1,24 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
-import { Button, Navbar } from 'react-bootstrap'
-import Spinner from 'react-spinkit'
-import queryString from 'query-string'
-import nonce from '../../nonce.js'
-import finishGitHubAuth from '../actions/finishGitHubAuth.js'
-//import * as jwtStore from '../stores/formInputStore.js'
-const ghclientid = process.env.GITHUB_CLIENT_ID
-const ghscopes = ['user:email']
-const ghauthbase = 'https://github.com/login/oauth/authorize'
+import { Navbar } from 'react-bootstrap'
+import { has } from 'lodash'
+import JWTPayload from '../react-prop-types/JWTPayload.js'
+import GitHubButton from './GitHubButton.jsx'
+import LazyImage from './LazyImage.jsx'
 
 export default class Header extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {}
-    const urlQuery = queryString.parse(location.search)
-    if (urlQuery.code && urlQuery.state) {
-      this.state = {
-        oauthCallbackCode: urlQuery.code, 
-        oauthCallbackState: urlQuery.state, 
-        oauthCallback: true
-      }
-    }
-    if (urlQuery.spin) this.state.oauthCallback = true // eslint-disable-line
-  }
   render() {
-    const oauthCallback = this.state.oauthCallback ? true : false
-    const scopes = ghscopes.join(' ')
-    const state = nonce(6)
-    const githubAuthUrl = `${ghauthbase}?client_id=${ghclientid}&scope=${scopes}&state=${state}`
-    let spinner = null
-    if (oauthCallback === true) {
-      spinner = ( // eslint-disable-line no-extra-parens
-        <Spinner
-          style={this.props.styles.spinner} 
-          spinnerName="cube-grid" 
-          noFadeIn 
-        />
+    const ghAuthorized = has(this.props, 'jwtPayload.services.github')
+    if (has(this.props, 'jwtPayload.services.github.username')) {
+     const jsonReducer = json => json.avatar_url
+     const ghUsername = this.props.jwtPayload.services.github.username
+     var avatar = ( // eslint-disable-line no-extra-parens
+       <LazyImage url={`https://api.github.com/users/${ghUsername}`}
+         jsonReducer={jsonReducer}
+       />
       )
+    } else {
+      avatar = <img src="public/bird.png" />
     }
     return (
     <Navbar>
@@ -49,43 +30,19 @@ export default class Header extends Component {
         </Link>
       </Navbar.Header>
       <Navbar.Form pullRight>
-        <Button bsSize="small"
-          href={oauthCallback === true ? null : githubAuthUrl}>
-          <span style={this.props.styles.buttonText}>
-            {oauthCallback === true ? 'Authorizing Github' : 'Sign in with GitHub'}
-          </span>
-          {spinner}
-        </Button>
+        {ghAuthorized === true ? avatar : <GitHubButton jwtPayload={this.props.jwtPayload} />}
       </Navbar.Form>
     </Navbar>
     )
   }
-  componentWillMount() {
-    if (this.state.oauthCallbackCode && this.state.oauthCallbackState) {
-      finishGitHubAuth(this.state.oauthCallbackCode, this.state.oauthCallbackState)
-      .then(jwt => {
-        // Dispatch an action with the jwt. It's base64 encoded at this step.
-        // eslint-disable-next-line no-console
-        console.log(jwt)
-        this.setState({oauthCallbackCode: null, oauthCallbackState: null})
-      })
-    }
-  }
 }
 
 Header.propTypes = {
-  styles: React.PropTypes.object
+  jwtPayload: JWTPayload.allowNull
 }
 
 Header.defaultProps = {
   styles: {
-    spinner: {
-      float: 'right',
-      marginLeft: '0.8em'
-    },
-    buttonText: {
-      float: 'left',
-      marginTop: '0.35em'
-    }
+    
   }
 }
