@@ -4,6 +4,12 @@ const HOSTNAME = process.env.HOSTNAME
 export default function finishGitHubAuth(code) {
   const p = new Promise((resolve, reject) => {
     fetch(`${HOSTNAME}/api/oauth_auth?code=${code}`)
+    .then(res => {
+      if (res.status < 200 || res.status >= 300) {
+        throw new Error('Bad response from finishGitHubAuth')
+      }
+      return res
+    })
     .then(res => res.text())
     .then(jwt => resolve(jwt))
     .catch(err => reject(err))
