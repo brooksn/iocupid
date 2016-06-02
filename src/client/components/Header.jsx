@@ -38,7 +38,9 @@ export default class Header extends Component {
           <NavItem href="/form">Form</NavItem>
         </LinkContainer>
       </Nav>
-
+      <Navbar.Form pullRight>
+        {ghAuthorized === true ? avatar : <GitHubButton jwtPayload={this.props.jwtPayload} />}
+      </Navbar.Form>
     </Navbar>
     )
   }
