@@ -15,10 +15,11 @@ export default class Header extends Component {
      var avatar = ( // eslint-disable-line no-extra-parens
        <LazyImage url={`https://api.github.com/users/${ghUsername}`}
          jsonReducer={jsonReducer}
+         placeholder="public/anonymous.png"
        />
       )
     } else {
-      avatar = <img src="public/bird.png" />
+      avatar = <img src="public/anonymous.png" />
     }
     return (
     <Navbar>
