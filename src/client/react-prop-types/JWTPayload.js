@@ -27,20 +27,24 @@ const testJWTPayload = function testJWTPayload(props, propName, componentName) {
 }
 
 const JWTPayload = function JWTPayload(props, propName, componentName) {
-  return testJWTPayload(props, propName, componentName, false)
+  return testJWTPayload(props, propName, componentName)
 }
 
 JWTPayload.isRequired = function JWTPayloadIsRequired(props, propName, componentName) {
-  if (typeof props[propName] === 'undefined') {
-    return new Error(oneLine`${propName} in ${componentName} may not be undefined.
-      Did you mean to use JWTPayload.allowNull in the PropTypes?`)
+  if (!props[propName]) {
+    return new Error(oneLine`Prop ${propName} in ${componentName} is required.
+      Did you mean to use JWTPayload.allowNull in the PropTypes instead?`)
   } else {
-    return testJWTPayload(props, propName)
+    return testJWTPayload(props, propName, componentName)
   }
 }
 
 JWTPayload.allowNull = function JWTPayloadIsRequired(props, propName, componentName) {
-  return testJWTPayload(props, propName, componentName, true)
+  if (typeof props[propName] === 'undefined') {
+    return new Error(oneLine`Prop ${propName} in ${componentName} may not be undefined. `)
+  } else {
+    return testJWTPayload(props, propName, componentName)
+  }
 }
 
 export default JWTPayload
