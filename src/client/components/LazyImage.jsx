@@ -7,7 +7,7 @@ export default class LazyImage extends Component {
     this.state = {img: null}
   }
   render() {
-    const src = this.state.img || 'public/bird.png'
+    const src = this.state.img || this.props.placeholder
     return (
       <img src={src} style={this.props.styles.img} />
     )
@@ -24,10 +24,12 @@ LazyImage.propTypes = {
   url: React.PropTypes.string,
   fetchOpts: React.PropTypes.object,
   jsonReducer: React.PropTypes.func,
-  styles: React.PropTypes.object.isRequired
+  styles: React.PropTypes.object.isRequired,
+  placeholder: React.PropTypes.string
 }
 
 LazyImage.defaultProps = {
+  placeholder: 'public/camera.png',
   styles: {
     img: {
       width: '3.8em',
