@@ -49,9 +49,3 @@ export default class Header extends Component {
 Header.propTypes = {
   jwtPayload: JWTPayload.allowNull
 }
-
-Header.defaultProps = {
-  styles: {
-    
-  }
-}
