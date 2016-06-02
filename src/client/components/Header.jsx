@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router'
-import { Navbar } from 'react-bootstrap'
+import { LinkContainer } from 'react-router-bootstrap'
+import { Nav, Navbar, NavItem } from 'react-bootstrap'
 import { has } from 'lodash'
 import JWTPayload from '../react-prop-types/JWTPayload.js'
 import GitHubButton from './GitHubButton.jsx'
@@ -24,15 +24,21 @@ export default class Header extends Component {
     return (
     <Navbar>
       <Navbar.Header>
-        <Link to="/">
+        <LinkContainer to="/">
           <Navbar.Brand>
             ioCupid
           </Navbar.Brand>
-        </Link>
+        </LinkContainer>
       </Navbar.Header>
-      <Navbar.Form pullRight>
-        {ghAuthorized === true ? avatar : <GitHubButton jwtPayload={this.props.jwtPayload} />}
-      </Navbar.Form>
+      <Nav bsStyle="pills">
+        <LinkContainer to="/search">
+          <NavItem>Search</NavItem>
+        </LinkContainer>
+        <LinkContainer to="/form">
+          <NavItem href="/form">Form</NavItem>
+        </LinkContainer>
+      </Nav>
+
     </Navbar>
     )
   }
