@@ -26,8 +26,6 @@ export default class SkillsInput extends Component {
     else return false
   }
   render() {
-    console.log(styles)
-    //bootstrapUtils.addStyle(FormGroup, styles)
     return (
       <FormGroup>
         <style type="text/css">{styles}</style>
