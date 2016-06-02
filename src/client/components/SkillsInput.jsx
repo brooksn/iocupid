@@ -3,6 +3,7 @@ import { Col, ControlLabel, FormGroup} from 'react-bootstrap'
 import Typeahead from 'react-bootstrap-typeahead'
 import { isEqual } from 'lodash'
 import skillsKeywords from '../mergedKeywords.js'
+import styles from '../css/TypeaheadStyles.js'
 
 export default class SkillsInput extends Component {
   constructor(props) {
@@ -25,12 +26,15 @@ export default class SkillsInput extends Component {
     else return false
   }
   render() {
+    console.log(styles)
+    //bootstrapUtils.addStyle(FormGroup, styles)
     return (
       <FormGroup>
+        <style type="text/css">{styles}</style>
         <Col componentClass={ControlLabel} sm={2}>
           Skills
         </Col>
-        <Col sm={10}>
+        <Col bsStyle sm={10}>
           <Typeahead multiple
             placeholder="skill"
             emptyLabel="no tags found"
