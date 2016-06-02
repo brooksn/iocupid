@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Col, ControlLabel, FormControl, FormGroup} from 'react-bootstrap'
 import store, { changeName, getName, CHANGE_EVENT } from '../stores/formInputStore.js'
 
 
@@ -12,14 +13,17 @@ export default class Name extends Component {
   }
   render() {
     return (
-    <div className="input-section">
-      <div className="input-container">
-        <input type="text" 
-          placeholder="Jane Doe" 
-          onChange={this.handleNameInputChange.bind(this)} 
-        />
-      </div>
-    </div>
+      <FormGroup>
+        <Col componentClass={ControlLabel} sm={2}>
+          Name
+        </Col>
+        <Col sm={10}>
+          <FormControl type="text"
+            placeholder="Jane Doe"
+            onChange={this.handleNameInputChange.bind(this)} 
+          />
+        </Col>
+      </FormGroup>
     )
   }
   storeChange() {

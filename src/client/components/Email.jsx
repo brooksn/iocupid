@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Col, ControlLabel, FormControl, FormGroup} from 'react-bootstrap'
 import store, { changeEmail, getEmail, CHANGE_EVENT } from '../stores/formInputStore.js'
 
 export default class Email extends Component {
@@ -11,15 +12,17 @@ export default class Email extends Component {
   }
   render() {
     return (
-    <div className="input-section">
-      <div className="input-container">
-        <input 
-          type="email" 
-          placeholder="example@gmail.com" 
-          onChange={this.handleEmailInputChange.bind(this)} 
-        />
-      </div>
-    </div>
+      <FormGroup>
+        <Col componentClass={ControlLabel} sm={2}>
+          Email
+        </Col>
+        <Col sm={10}>
+          <FormControl type="email"
+            placeholder="example@gmail.com"
+            onChange={this.handleEmailInputChange.bind(this)} 
+          />
+        </Col>
+      </FormGroup>
     )
   }
   storeChange() {
