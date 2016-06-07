@@ -14,9 +14,6 @@ const oauthAuth = require('./express_routes/oauth_auth.js').bind(this)
 const express = require('express')
 const app = express()
 const rconnectionparams = { host: 'localhost', port: 28015 }
-this.ghsecret = process.env.GITHUB_CLIENT_SECRET
-this.ghid = process.env.GITHUB_CLIENT_ID
-this.ghtokenurl = 'https://github.com/login/oauth/access_token'
 this.rdbname = 'iocupid'
 this.utable = 'users'
 
@@ -35,7 +32,7 @@ app.use('/public', express.static(path.join(__dirname, 'client', 'public')))
 app.get('/api/test', (req, res) => res.send(emoji.emojify('Just a test :heart:')))
 
 app.get('/api/oauth_auth', (req, res) => {
-  co(oauthAuth(req.query.code))
+  co(oauthAuth(req.query.code, req.query.service))
   .then(jwt => res.send(jwt))
   .catch(err => {
     res.status(500).send(err)
