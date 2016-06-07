@@ -4,22 +4,24 @@ import Spinner from 'react-spinkit'
 import queryString from 'query-string'
 import nonce from '../../nonce.js'
 import { oneLineTrim } from 'common-tags'
-import finishGitHubAuth from '../actions/finishGitHubAuth.js'
+import finishOauth from '../actions/finishOauth.js'
 import { has } from 'lodash'
 import { setJWTBase64 } from '../actions/ActionCreators.js'
 import AppDispatcher from '../dispatcher/AppDispatcher.js'
 import JWTPayload from '../react-prop-types/JWTPayload.js'
-const ghclientid = process.env.GITHUB_CLIENT_ID
 
-export default class GitHubLoginButton extends Component {
+export default class OAuthLoginButton extends Component {
   constructor(props) {
     super(props)
+    this.service = props.serviceName.toLowerCase()
     const state = {}
-    state.authorized = has(this.props, 'jwtPayload.services.github')
+    state.authorized = has(this.props, 'jwtPayload.services.' + this.service)
     const urlQuery = queryString.parse(location.search)
-    if (urlQuery.code && urlQuery.state) {
+    if (urlQuery.code && urlQuery.state
+      && urlQuery.service.toLowerCase() === this.service) {
       state.oauthCallbackCode = urlQuery.code
       state.oauthCallbackState = urlQuery.state
+      state.oauthCallbackService = urlQuery.service
       state.oauthCallback = true
     }
     if (urlQuery.spin) state.oauthCallback = 'spin'
@@ -29,18 +31,18 @@ export default class GitHubLoginButton extends Component {
     const state = nonce(6)
     switch (this.state.oauthCallback) {
       case 'spin':
-        var buttonLabel = 'Authorizing GitHub'
+        var buttonLabel = 'Authorizing ' + this.props.serviceName
         break;
       case 'fail':
-        buttonLabel = 'GitHub authorization failed'
+        buttonLabel = this.props.serviceName + ' authorization failed'
         break;
       default:
-        buttonLabel = 'Sign in with GitHub'
+        buttonLabel = 'Sign in with ' + this.props.serviceName
     }
-    const githubAuthUrl = oneLineTrim`
-      https://github.com/login/oauth/authorize
-      ?client_id=${ghclientid}
-      &scope=${['user:email'].join(' ')}
+    const authUrl = oneLineTrim`
+      ${this.props.oauthAuthUrl}
+      ?client_id=${this.props.oauthClientId}
+      &scope=${this.props.oauthScope}
       &state=${state}`
     let spinner = null
     if (this.state.oauthCallback === 'spin') {
@@ -54,7 +56,7 @@ export default class GitHubLoginButton extends Component {
     }
     const authButton = ( //eslint-disable-line no-extra-parens
       <Button bsSize="small"
-        href={this.state.oauthCallback === 'spin' ? null : githubAuthUrl}>
+        href={this.state.oauthCallback === 'spin' ? null : authUrl}>
         <span style={this.props.styles.buttonText}>
           {buttonLabel}
         </span>
@@ -65,13 +67,14 @@ export default class GitHubLoginButton extends Component {
   }
   componentWillMount() {
     if (this.state.oauthCallbackCode && this.state.oauthCallbackState) {
-      finishGitHubAuth(this.state.oauthCallbackCode, this.state.oauthCallbackState)
+      finishOauth(this.state.oauthCallbackCode, this.state.oauthCallbackState, this.service)
       .then(this.iocupidTokenCallback.bind(this))
       .catch(this.setState({oauthCallback: 'fail'}))
     }
   }
   componentWillReceiveProps(nextProps) {
-    const authorized = has(nextProps, 'jwtPayload.services.github')
+    this.service = nextProps.serviceName.toLowerCase()
+    const authorized = has(nextProps, 'jwtPayload.services.' + this.service)
     this.setState({authorized})
   }
   iocupidTokenCallback(token) {
@@ -80,12 +83,16 @@ export default class GitHubLoginButton extends Component {
   }
 }
 
-GitHubLoginButton.propTypes = {
+OAuthLoginButton.propTypes = {
   styles: React.PropTypes.object,
+  oauthAuthUrl: React.PropTypes.string.isRequired,
+  oauthClientId: React.PropTypes.string.isRequired,
+  serviceName: React.PropTypes.string.isRequired,
+  oauthScope: React.PropTypes.string,
   jwtPayload: JWTPayload.allowNull
 }
 
-GitHubLoginButton.defaultProps = {
+OAuthLoginButton.defaultProps = {
   styles: {
     spinner: {
       float: 'right',

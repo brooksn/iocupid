@@ -18,7 +18,8 @@ const testJWTPayload = function testJWTPayload(props, propName, componentName) {
         if (typeof payload.services[service].token !== 'string') {
           return new Error('Each service in a JWTPayload must contain a key "token". ')
         }
-        if (typeof payload.services[service].username !== 'string') {
+        if (typeof payload.services[service].username !== 'string'
+          && typeof payload.services[service].id !== 'string') {
           return new Error('Each service in a JWTPayload must contain a key "username". ')
         }
       }

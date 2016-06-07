@@ -32,8 +32,7 @@ LazyImage.defaultProps = {
   placeholder: 'public/camera.png',
   styles: {
     img: {
-      width: '3.8em',
-      borderRadius: '50%'
+      width: '3.8em'
     }
   }
 }
