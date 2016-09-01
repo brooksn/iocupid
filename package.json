@@ -39,7 +39,7 @@
     "query-string": "^4.1.0",
     "react": "^15.1.0",
     "react-bootstrap": "^0.29.4",
-    "react-bootstrap-typeahead": "^0.5.1",
+    "react-bootstrap-typeahead": "^0.9.1",
     "react-dom": "^15.1.0",
     "react-github-fork-ribbon": "^0.4.4",
     "react-router": "^2.4.1",
