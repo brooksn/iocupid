@@ -38,7 +38,7 @@
     "node-fetch": "^1.5.2",
     "query-string": "^4.1.0",
     "react": "^15.1.0",
-    "react-bootstrap": "^0.29.4",
+    "react-bootstrap": "^0.30.7",
     "react-bootstrap-typeahead": "^0.5.1",
     "react-dom": "^15.1.0",
     "react-github-fork-ribbon": "^0.4.4",
